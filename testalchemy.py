@@ -218,7 +218,7 @@ class DBHistory(object):
             event.Events._remove(target, 'after_flush', self._after_flush)
             event.Events._remove(target, 'after_commit', self._after_commit)
             event.Events._remove(target, 'after_soft_rollback',
-                             self._after_rollback)
+                                 self._after_rollback)
         self.clear_cache()
 
     def _populate_idents_dict(self, idents, objects):
