@@ -207,9 +207,17 @@ class DBHistory(object):
         return self
 
     def __exit__(self, type, value, traceback):
-        event.Events._remove(self._target, 'after_flush', self._after_flush)
-        event.Events._remove(self._target, 'after_commit', self._after_commit)
-        event.Events._remove(self._target, 'after_soft_rollback',
+        target = self._target
+        try:
+            # sa==0.9
+            event.remove(target, 'after_flush', self._after_flush)
+            event.remove(target, 'after_commit', self._after_commit)
+            event.remove(target, 'after_soft_rollback', self._after_rollback)
+        except AttributeError:
+            # sa==0.8
+            event.Events._remove(target, 'after_flush', self._after_flush)
+            event.Events._remove(target, 'after_commit', self._after_commit)
+            event.Events._remove(target, 'after_soft_rollback',
                              self._after_rollback)
         self.clear_cache()
 
